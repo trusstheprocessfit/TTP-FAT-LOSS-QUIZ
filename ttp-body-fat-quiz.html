@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The T.T.P. Fat Loss Quiz | Truss The Process Fitness</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy-deep:#050d1a;
+  --navy-mid:#0a1628;
+  --navy-card:#0e1f3a;
+  --navy-border:#1a3260;
+  --gold:#c9900c;
+  --gold-light:#e8b84b;
+  --gold-dim:#7a5608;
+  --gold-bg:#1a1002;
+  --text-primary:#f0ead8;
+  --text-secondary:#8fa3c8;
+  --text-muted:#4a6080;
+  --white:#ffffff;
+}
+html,body{min-height:100%;background:var(--navy-deep);color:var(--text-primary);font-family:'Barlow',sans-serif;font-size:16px;line-height:1.6}
+body{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:0 0 60px}
+
+/* HEADER BAND */
+.header-band{width:100%;background:var(--navy-mid);border-bottom:2px solid var(--gold-dim);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;margin-bottom:0}
+.brand-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:var(--gold-light)}
+.brand-tag{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase}
+
+/* PROGRESS */
+.progress-wrap{width:100%;max-width:700px;padding:28px 24px 0;display:none}
+.progress-label{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px;display:flex;justify-content:space-between}
+.progress-track{width:100%;height:4px;background:var(--navy-card);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 0.5s cubic-bezier(.4,0,.2,1)}
+
+/* SCREENS */
+.screen{width:100%;max-width:700px;padding:0 24px;display:none;animation:fadeUp .4s ease}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* INTRO SCREEN */
+.intro-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-top:48px;margin-bottom:16px}
+.intro-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,8vw,72px);line-height:0.95;color:var(--text-primary);margin-bottom:8px}
+.intro-title span{color:var(--gold)}
+.intro-subtitle{font-family:'Barlow Condensed',sans-serif;font-size:clamp(20px,4vw,28px);font-weight:600;letter-spacing:1px;color:var(--text-secondary);margin-bottom:28px;text-transform:uppercase}
+.intro-body{font-size:16px;color:var(--text-secondary);max-width:560px;margin-bottom:40px;line-height:1.7}
+.intro-stats{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:48px}
+.stat-pill{background:var(--navy-card);border:1px solid var(--navy-border);border-radius:4px;padding:14px 20px}
+.stat-pill .num{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gold-light);display:block;line-height:1}
+.stat-pill .lbl{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase}
+.divider{width:100%;height:1px;background:var(--navy-border);margin:40px 0}
+
+/* BUTTONS */
+.btn-primary{display:inline-block;background:var(--gold);color:var(--navy-deep);font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;padding:16px 44px;border:none;cursor:pointer;text-decoration:none;transition:background .2s,transform .1s;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))}
+.btn-primary:hover{background:var(--gold-light);transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(1px)}
+.btn-secondary{display:inline-block;background:transparent;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;padding:14px 36px;border:1px solid var(--gold-dim);cursor:pointer;transition:border-color .2s,background .2s}
+.btn-secondary:hover{border-color:var(--gold);background:var(--gold-bg)}
+
+/* QUESTION SCREEN */
+.q-header{margin-top:40px;margin-bottom:8px}
+.q-number{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:3px;color:var(--gold);text-transform:uppercase}
+.q-text{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,5vw,42px);line-height:1.1;color:var(--text-primary);margin:12px 0 32px}
+.answers{display:flex;flex-direction:column;gap:12px;margin-bottom:32px}
+.answer-btn{background:var(--navy-card);border:1px solid var(--navy-border);color:var(--text-primary);font-family:'Barlow',sans-serif;font-size:15px;font-weight:500;padding:18px 22px;text-align:left;cursor:pointer;transition:border-color .2s,background .2s,color .2s;line-height:1.4;position:relative;border-radius:2px}
+.answer-btn:hover{border-color:var(--gold-dim);background:#0e1f3a;color:var(--text-primary)}
+.answer-btn.selected{border-color:var(--gold);background:var(--gold-bg);color:var(--gold-light)}
+.answer-btn .answer-letter{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);margin-right:12px;min-width:20px;display:inline-block}
+.answer-btn.selected .answer-letter{color:var(--gold-light)}
+.nav-row{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.back-btn{background:transparent;border:none;color:var(--text-muted);font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;padding:8px 0;transition:color .2s}
+.back-btn:hover{color:var(--text-secondary)}
+
+/* RESULTS SCREEN */
+.result-badge{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:6px 14px;border:1px solid var(--gold-dim);color:var(--gold);background:var(--gold-bg);margin-top:48px;margin-bottom:16px}
+.result-type{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,2.5vw,18px);letter-spacing:4px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px}
+.result-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,7vw,62px);line-height:0.95;color:var(--text-primary);margin-bottom:6px}
+.result-subtitle{font-family:'Bebas Neue',sans-serif;font-size:clamp(18px,3.5vw,26px);color:var(--gold-light);margin-bottom:24px;line-height:1.1}
+.result-body{font-size:15px;color:var(--text-secondary);max-width:560px;line-height:1.8;margin-bottom:32px}
+.result-card{background:var(--navy-card);border:1px solid var(--navy-border);border-left:3px solid var(--gold);padding:24px 28px;margin-bottom:40px;border-radius:0 2px 2px 0}
+.result-card h3{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--gold-light);margin-bottom:16px;text-transform:uppercase}
+.result-card ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.result-card li{font-size:14px;color:var(--text-secondary);padding-left:20px;position:relative;line-height:1.6}
+.result-card li::before{content:'▸';position:absolute;left:0;color:var(--gold);font-size:12px;top:2px}
+.cta-block{background:var(--navy-mid);border:1px solid var(--navy-border);border-top:2px solid var(--gold);padding:32px 28px;margin-bottom:24px}
+.cta-block h2{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--text-primary);margin-bottom:8px}
+.cta-block p{font-size:14px;color:var(--text-secondary);margin-bottom:24px;line-height:1.7}
+.cta-block .btn-primary{font-size:17px;letter-spacing:2px;padding:18px 40px}
+.retake{display:block;margin-top:20px;background:transparent;border:none;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;cursor:pointer;text-align:left;padding:0;transition:color .2s}
+.retake:hover{color:var(--text-secondary)}
+
+/* EMAIL GATE SCREEN */
+.gate-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-top:48px;margin-bottom:16px}
+.gate-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(34px,6vw,54px);line-height:1;color:var(--text-primary);margin-bottom:8px}
+.gate-title span{color:var(--gold)}
+.gate-body{font-size:15px;color:var(--text-secondary);max-width:520px;line-height:1.75;margin-bottom:36px}
+.gate-form{display:flex;flex-direction:column;gap:14px;max-width:480px;margin-bottom:16px}
+.gate-input{background:var(--navy-card);border:1px solid var(--navy-border);color:var(--text-primary);font-family:'Barlow',sans-serif;font-size:15px;padding:16px 18px;outline:none;transition:border-color .2s;border-radius:2px;width:100%}
+.gate-input::placeholder{color:var(--text-muted)}
+.gate-input:focus{border-color:var(--gold-dim)}
+.gate-input.error{border-color:#c0392b}
+.gate-error{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1px;color:#e74c3c;display:none;margin-top:-6px}
+.gate-privacy{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;color:var(--text-muted);margin-top:4px}
+.gate-blocker-preview{background:var(--navy-card);border:1px solid var(--navy-border);border-left:3px solid var(--gold-dim);padding:20px 24px;margin-bottom:36px;border-radius:0 2px 2px 0}
+.gate-blocker-preview p{font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px}
+.gate-blocker-preview .blur-text{font-size:15px;color:var(--text-secondary);filter:blur(4px);user-select:none;line-height:1.6}
+
+/* DECORATIVE LINE */
+.gold-rule{width:48px;height:3px;background:var(--gold);margin:24px 0}
+
+/* RESPONSIVE */
+@media(max-width:480px){
+  .intro-stats{gap:12px}
+  .stat-pill{flex:1;min-width:120px}
+  .answer-btn{padding:14px 16px;font-size:14px}
+}
+</style>
+</head>
+<body>
+
+<div class="header-band">
+  <div>
+    <div class="brand-name">TRUSS THE PROCESS</div>
+    <div class="brand-tag">Fitness &amp; Nutrition Coaching</div>
+  </div>
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:2px;color:var(--gold);text-transform:uppercase">T.T.P. System</div>
+</div>
+
+<div class="progress-wrap" id="progressWrap">
+  <div class="progress-label">
+    <span>Your Fat Loss Quiz</span>
+    <span id="progressLabel">Question 1 of 7</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:14%"></div></div>
+</div>
+
+<!-- INTRO -->
+<div class="screen active" id="screenIntro" style="padding-bottom:0">
+  <div class="intro-eyebrow">Free Assessment — Takes 2 Minutes</div>
+  <div class="intro-title">What's <span>Sabotaging</span><br>Your Fat Loss?</div>
+  <div class="intro-subtitle">The T.T.P. Fat Loss Quiz</div>
+  <div class="intro-body">You've tried. You've started. You've stopped. But you still haven't figured out the <em>real</em> reason you're stuck. This quiz identifies your exact fat loss blocker — and shows you how the T.T.P. System removes it for good.</div>
+  <div class="intro-stats">
+    <div class="stat-pill"><span class="num">7</span><span class="lbl">Quick Questions</span></div>
+    <div class="stat-pill"><span class="num">4</span><span class="lbl">Blocker Types</span></div>
+    <div class="stat-pill"><span class="num">1</span><span class="lbl">Personalized Result</span></div>
+  </div>
+  <button class="btn-primary" onclick="startQuiz()">TAKE THE QUIZ — IT'S FREE</button>
+  <div class="divider"></div>
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:1px;color:var(--text-muted);margin-bottom:48px">No fluff. No spam. Just the truth about what's holding you back.</div>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="screenQuiz">
+  <div class="q-header">
+    <div class="q-number" id="qNumber">Question 1 of 7</div>
+    <div class="gold-rule"></div>
+    <div class="q-text" id="qText"></div>
+  </div>
+  <div class="answers" id="answers"></div>
+  <div class="nav-row">
+    <button class="back-btn" id="backBtn" onclick="goBack()">← BACK</button>
+    <button class="btn-primary" id="nextBtn" onclick="goNext()" style="display:none">NEXT →</button>
+  </div>
+</div>
+
+<!-- EMAIL GATE -->
+<div class="screen" id="screenGate">
+  <div class="gate-eyebrow">You're Almost There</div>
+  <div class="gate-title">Your Fat Loss Blocker<br>Has Been <span>Identified.</span></div>
+  <div class="gold-rule"></div>
+  <div class="gate-body">Enter your name and email below to unlock your full results — including your specific blocker type, why it's been stopping you, and exactly how the T.T.P. System eliminates it.</div>
+  <div class="gate-blocker-preview">
+    <p>Your result is ready — unlock it now</p>
+    <div class="blur-text">Your dominant fat loss blocker has been identified. Based on your answers, here is the exact reason your progress has stalled and the precise T.T.P. path forward for your body and your situation...</div>
+  </div>
+  <div class="gate-form">
+    <input class="gate-input" id="gateName" type="text" placeholder="Your first name" autocomplete="given-name">
+    <div class="gate-error" id="nameError">Please enter your first name.</div>
+    <input class="gate-input" id="gateEmail" type="email" placeholder="Your best email address" autocomplete="email">
+    <div class="gate-error" id="emailError">Please enter a valid email address.</div>
+    <button class="btn-primary" onclick="submitGate()" style="margin-top:6px">REVEAL MY RESULTS →</button>
+  </div>
+  <div class="gate-privacy">No spam. No fluff. Just your results — and the truth about what's been stopping you.</div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="screenResult">
+  <div class="result-badge" id="rBadge">Your Fat Loss Blocker</div>
+  <div class="result-type" id="rType"></div>
+  <div class="result-title" id="rTitle"></div>
+  <div class="result-subtitle" id="rSubtitle"></div>
+  <div class="result-body" id="rBody"></div>
+  <div class="result-card">
+    <h3>What the T.T.P. System Does For You</h3>
+    <ul id="rBullets"></ul>
+  </div>
+  <div class="cta-block">
+    <h2>READY TO STOP GUESSING?</h2>
+    <p id="rCta"></p>
+    <a class="btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSfSoIlA2DLcLdypbZsy_mZDfIz3qZwLhYFKoR2RSK00EiWmFQ/viewform?usp=publish-editor" target="_blank" id="rCtaBtn">APPLY FOR 1:1 T.T.P. COACHING →</a>
+  </div>
+  <button class="retake" onclick="retake()">↺ Retake the quiz</button>
+</div>
+
+<script>
+const QUESTIONS=[
+  {
+    text:"When it comes to food right now, which best describes you?",
+    answers:[
+      {text:"I have no real plan — I just eat and hope for the best.",type:"NC"},
+      {text:"I have a plan but I rarely stick to it.",type:"IL"},
+      {text:"I eat pretty clean but the weight still won't move.",type:"TM"},
+      {text:"I start strong, then one bad day turns into a bad week.",type:"MS"}
+    ]
+  },
+  {
+    text:"How consistent have you been with training in the last 3 months?",
+    answers:[
+      {text:"Barely — I never really know what I should be doing.",type:"NC"},
+      {text:"I start programs, but fall off after a week or two.",type:"IL"},
+      {text:"I train consistently but my body is not responding.",type:"TM"},
+      {text:"I go hard for a stretch, then crash and feel like a failure.",type:"MS"}
+    ]
+  },
+  {
+    text:"When you look in the mirror, what's the dominant feeling?",
+    answers:[
+      {text:"Confused — I genuinely don't understand why nothing is working.",type:"NC"},
+      {text:"Frustrated — I've tried things but keep reverting.",type:"IL"},
+      {text:"Defeated — I'm putting in work and seeing nothing.",type:"TM"},
+      {text:"Ashamed — like I keep letting myself down.",type:"MS"}
+    ]
+  },
+  {
+    text:"When you 'fall off,' what does that actually look like?",
+    answers:[
+      {text:"I didn't really have a structured plan to fall off of.",type:"NC"},
+      {text:"I tell myself I'll restart on Monday. Every Monday.",type:"IL"},
+      {text:"I keep going but change nothing — same effort, same zero results.",type:"TM"},
+      {text:"One bad meal turns into a week-long spiral I can't stop.",type:"MS"}
+    ]
+  },
+  {
+    text:"Which best describes what you've tried that hasn't worked?",
+    answers:[
+      {text:"Random diets and meal plans I found online — nothing sticks.",type:"NC"},
+      {text:"Multiple programs where I do well for a while, then ghost them.",type:"IL"},
+      {text:"Months of consistent training with almost no visible change.",type:"TM"},
+      {text:"I've succeeded before, but I always end up back in this same spot.",type:"MS"}
+    ]
+  },
+  {
+    text:"Finish this sentence honestly: 'My biggest fat loss problem is...'",
+    answers:[
+      {text:"...I don't know what the right plan even looks like for my body.",type:"NC"},
+      {text:"...I know what to do. I just don't do it.",type:"IL"},
+      {text:"...I'm doing everything I'm supposed to and still not progressing.",type:"TM"},
+      {text:"...I'm the reason I keep failing. I stop myself every single time.",type:"MS"}
+    ]
+  },
+  {
+    text:"What would actually change everything for you right now?",
+    answers:[
+      {text:"A clear, personalized plan — exactly what to eat and do for MY body.",type:"NC"},
+      {text:"Real accountability and structure so I stay consistent no matter what.",type:"IL"},
+      {text:"A smarter program built for my specific body, not a generic template.",type:"TM"},
+      {text:"Help breaking the mental cycle that keeps dragging me back to zero.",type:"MS"}
+    ]
+  }
+];
+
+const RESULTS={
+  NC:{
+    type:"BLOCKER TYPE: NUTRITION CHAOS",
+    title:"Your Fork Is The Problem.",
+    subtitle:"Your Plan Is The Fix.",
+    body:"You're not lazy. You're not broken. You're operating without a nutritional roadmap built for your specific body. You're guessing what to eat, how much to eat, and when to eat — and guessing is costing you results every single day. The T.T.P. System starts here: real numbers, a real plan, and zero guesswork left on the table.",
+    bullets:[
+      "Calculate your exact caloric and macro targets based on your body — not someone else's.",
+      "Build a nutrition structure you can actually follow, not a diet that punishes you.",
+      "Remove the confusion so the only thing left is execution."
+    ],
+    cta:"You've been guessing long enough. The T.T.P. System gives you the exact nutrition blueprint your body needs — and a coach to make sure you execute it. Spots for 1:1 coaching are limited."
+  },
+  IL:{
+    type:"BLOCKER TYPE: INCONSISTENCY LOOP",
+    title:"You Don't Lack Knowledge.",
+    subtitle:"You Lack A System.",
+    body:"You know what to do. You've proved it — for a week or two at a time. But knowledge without a system is just good intentions. The gap between knowing and executing is where your fat loss is dying. The T.T.P. System was built specifically for this: follow the plan, track the numbers, execute consistently — and you will see results. No more Monday restarts.",
+    bullets:[
+      "A structured T.T.P. plan that eliminates decision fatigue and keeps you on track.",
+      "Accountability that closes the gap between what you know and what you actually do.",
+      "A system that works when your motivation doesn't."
+    ],
+    cta:"Motivation fades. Systems don't. The T.T.P. System gives you the accountability and structure to stay consistent even when life gets in the way. Apply for 1:1 coaching below."
+  },
+  TM:{
+    type:"BLOCKER TYPE: TRAINING MISMATCH",
+    title:"You're Working Hard.",
+    subtitle:"In The Wrong Direction.",
+    body:"You're showing up. You're putting in real effort. And you're getting nothing back — which is arguably the most demoralizing place to be. But this isn't a motivation problem. This is a programming problem. Your training and nutrition aren't working together for your specific body, metabolism, and goals. The T.T.P. System audits the mismatch and turns your effort into actual, visible results.",
+    bullets:[
+      "A personalized training program designed around how YOUR body responds — not a generic template.",
+      "Nutrition that's synced to your training load so every workout counts.",
+      "Progress tracking that tells you exactly what to adjust and when."
+    ],
+    cta:"Hard work deserves results. If you've been putting in the effort with nothing to show for it, it's not you — it's the plan. Let's fix the mismatch. Apply for 1:1 T.T.P. coaching below."
+  },
+  MS:{
+    type:"BLOCKER TYPE: MINDSET SABOTAGE",
+    title:"You're One Decision Away.",
+    subtitle:"Stop Being The Obstacle.",
+    body:"You've done it before. You know you're capable. But something keeps pulling you back — and you've been calling it weakness when it's actually a pattern. A predictable, breakable pattern. The T.T.P. System gives you the structure, accountability, and process to stop relying on motivation and start relying on a system that does the heavy lifting for you.",
+    bullets:[
+      "A clear, non-negotiable daily process that removes emotional decision-making from fat loss.",
+      "Consistent coaching check-ins that catch the spiral before it starts.",
+      "A mindset framework built into every step of the T.T.P. System: Truss the Process."
+    ],
+    cta:"You don't need another pep talk. You need a process. The T.T.P. System is built to outlast your bad days, your doubt, and your self-sabotage. Apply for 1:1 coaching — and finally break the cycle."
+  }
+};
+
+let current=0;
+let answers=[];
+let selected=null;
+
+function startQuiz(){
+  document.getElementById('screenIntro').classList.remove('active');
+  document.getElementById('progressWrap').style.display='block';
+  document.getElementById('screenQuiz').classList.add('active');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q=QUESTIONS[current];
+  document.getElementById('qNumber').textContent='Question '+(current+1)+' of '+QUESTIONS.length;
+  document.getElementById('qText').textContent=q.text;
+  document.getElementById('progressLabel').textContent='Question '+(current+1)+' of '+QUESTIONS.length;
+  document.getElementById('progressFill').style.width=(((current+1)/QUESTIONS.length)*100)+'%';
+  const letters=['A','B','C','D'];
+  const container=document.getElementById('answers');
+  container.innerHTML='';
+  selected=answers[current]||null;
+  q.answers.forEach((a,i)=>{
+    const btn=document.createElement('button');
+    btn.className='answer-btn'+(selected===i?' selected':'');
+    btn.innerHTML='<span class="answer-letter">'+letters[i]+'</span>'+a.text;
+    btn.onclick=()=>selectAnswer(i);
+    container.appendChild(btn);
+  });
+  document.getElementById('backBtn').style.visibility=current===0?'hidden':'visible';
+  document.getElementById('nextBtn').style.display=selected!==null?'inline-block':'none';
+  // Auto-show next if already answered
+}
+
+function selectAnswer(i){
+  selected=i;
+  answers[current]=i;
+  document.querySelectorAll('.answer-btn').forEach((b,idx)=>{
+    b.classList.toggle('selected',idx===i);
+  });
+  document.getElementById('nextBtn').style.display='inline-block';
+}
+
+function goNext(){
+  if(selected===null)return;
+  if(current<QUESTIONS.length-1){
+    current++;
+    selected=answers[current]!==undefined?answers[current]:null;
+    renderQuestion();
+    window.scrollTo({top:0,behavior:'smooth'});
+  } else {
+    showGate();
+  }
+}
+
+function goBack(){
+  if(current>0){current--;renderQuestion();}
+}
+
+function showGate(){
+  document.getElementById('progressWrap').style.display='none';
+  document.getElementById('screenQuiz').classList.remove('active');
+  document.getElementById('screenGate').classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function submitGate(){
+  const name=document.getElementById('gateName').value.trim();
+  const email=document.getElementById('gateEmail').value.trim();
+  let valid=true;
+  document.getElementById('nameError').style.display='none';
+  document.getElementById('emailError').style.display='none';
+  document.getElementById('gateName').classList.remove('error');
+  document.getElementById('gateEmail').classList.remove('error');
+  if(!name){
+    document.getElementById('nameError').style.display='block';
+    document.getElementById('gateName').classList.add('error');
+    valid=false;
+  }
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    document.getElementById('emailError').style.display='block';
+    document.getElementById('gateEmail').classList.add('error');
+    valid=false;
+  }
+  if(!valid)return;
+
+  /* -------------------------------------------------------
+     ZAPIER WEBHOOK INTEGRATION
+     -------------------------------------------------------
+     1. Create your Zap in Zapier (see setup instructions).
+     2. Replace YOUR_ZAPIER_WEBHOOK_URL below with the
+        webhook URL Zapier gives you.
+     3. That's it — Zapier handles sending to MailerLite.
+     ------------------------------------------------------- */
+  const ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/27582456/4yqs1cj/';
+  if(ZAPIER_WEBHOOK_URL !== 'YOUR_ZAPIER_WEBHOOK_URL'){
+    fetch(ZAPIER_WEBHOOK_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        first_name: name,
+        email: email,
+        blocker_type: (()=>{
+          const scores={NC:0,IL:0,TM:0,MS:0};
+          QUESTIONS.forEach((q,qi)=>{const ai=answers[qi];if(ai!==undefined)scores[q.answers[ai].type]++;});
+          return Object.entries(scores).sort((a,b)=>b[1]-a[1])[0][0];
+        })()
+      })
+    }).catch(()=>{});
+  }
+
+  showResult(name);
+}
+
+function showResult(name){
+  const scores={NC:0,IL:0,TM:0,MS:0};
+  QUESTIONS.forEach((q,qi)=>{
+    const ai=answers[qi];
+    if(ai!==undefined)scores[q.answers[ai].type]++;
+  });
+  const top=Object.entries(scores).sort((a,b)=>b[1]-a[1])[0][0];
+  const r=RESULTS[top];
+  const firstName=name?name.split(' ')[0]:'';
+  document.getElementById('rType').textContent=r.type;
+  document.getElementById('rTitle').textContent=r.title;
+  document.getElementById('rSubtitle').textContent=r.subtitle;
+  document.getElementById('rBody').textContent=r.body;
+  document.getElementById('rCta').textContent=r.cta;
+  if(firstName)document.getElementById('rBadge').textContent=firstName+"'s Fat Loss Blocker";
+  const ul=document.getElementById('rBullets');
+  ul.innerHTML='';
+  r.bullets.forEach(b=>{const li=document.createElement('li');li.textContent=b;ul.appendChild(li);});
+  document.getElementById('screenGate').classList.remove('active');
+  document.getElementById('screenResult').classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function retake(){
+  current=0;answers=[];selected=null;
+  document.getElementById('screenResult').classList.remove('active');
+  document.getElementById('progressWrap').style.display='block';
+  document.getElementById('screenQuiz').classList.add('active');
+  renderQuestion();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
